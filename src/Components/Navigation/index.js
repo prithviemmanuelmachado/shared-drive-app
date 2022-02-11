@@ -1,4 +1,3 @@
-import style from './style.module.css';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -19,8 +18,7 @@ import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
     items: {
-        width: '400px',
-    
+        width: '400px'
     }
 });
 
@@ -101,7 +99,7 @@ function Navigation(props){
     [
         {
             name: 'Login',
-            icon: <LogoutOutlinedIcon
+            icon: <LoginOutlinedIcon
                     color='primary'
                     fontSize='medium'/>,
             onClick: () => {
