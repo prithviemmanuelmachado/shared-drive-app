@@ -22,9 +22,23 @@ function Signup(props)
         timeout: 0
     });
     const navigate = useNavigate();
-
+    const setErrorToast = (message) => {
+        setToast({
+            message: message,
+            severity: 'error',
+            handleClose: () => {setToast({
+                message: '',
+                severity: 'error',
+                handleClose: () => {},
+                isOpen: false,
+                timeout: 0
+            })},
+            isOpen: true,
+            timeout: 4000
+        });
+    };
     const submit = () => {
-        if(password != ''){
+        if(password !== ''){
             const model = {
                 username : username,
                 firstName : firstName,
@@ -43,23 +57,11 @@ function Signup(props)
                         navigate('/login');
                     },
                     isOpen: true,
-                    timeout: 2000
+                    timeout: 1000
                 });
             }, (message) => {
                 setIsLoading(false);
-                setToast({
-                    message: message,
-                    severity: 'error',
-                    handleClose: () => {setToast({
-                        message: '',
-                        severity: 'error',
-                        handleClose: () => {},
-                        isOpen: false,
-                        timeout: 0
-                    })},
-                    isOpen: true,
-                    timeout: 4000
-                });
+                setErrorToast(message);
             });
         }
         
@@ -130,7 +132,8 @@ function Signup(props)
             backLink='/login'
             body={body}
             header={header}
-            onSubmit={submit}/>
+            onSubmit={submit}
+            onError={setErrorToast}/>
     </>
 }
 

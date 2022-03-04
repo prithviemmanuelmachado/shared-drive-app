@@ -46,6 +46,7 @@ function FormRegular(props){
                                                     {footerLink.text}
                                                 </Typography>
                                             </Link> : "";
+    
     return<>
         <Card
             className={classes.cardWidth}

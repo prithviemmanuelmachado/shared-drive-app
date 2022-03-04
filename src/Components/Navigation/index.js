@@ -6,7 +6,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AltRouteOutlinedIcon from '@mui/icons-material/AltRouteOutlined';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,21 +15,35 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie/es6';
 
 const useStyles = makeStyles({
     items: {
         width: '400px'
     }
 });
+const cookies = new Cookies();
+let loggedInStatus = false;
+
+export function setLoggedInStatus(status){
+    loggedInStatus = status;
+}
 
 function Navigation(props){
+    const doesTokenExist = cookies.get('jwt')? true: false;
+    if(doesTokenExist != loggedInStatus)
+        setLoggedInStatus(doesTokenExist);
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    useEffect(() => {
+        setIsLoggedIn(loggedInStatus);
+    } , [loggedInStatus]);
     const navigate = useNavigate();
     const classes =  useStyles();
     const {
         open,
         toggle
     } = props;
+    
     const topMenuItems = isLoggedIn?[
         {
             name: 'Home',
@@ -81,7 +95,9 @@ function Navigation(props){
                     color='primary'
                     fontSize='medium'/>,
             onClick: () => {
-                setIsLoggedIn(false)
+                cookies.remove('jwt');
+                toggle();
+                setLoggedInStatus(false);
             }
         },
         {

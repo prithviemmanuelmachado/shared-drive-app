@@ -49,14 +49,13 @@ const useStyle = makeStyles(theme => {
 function FormProgress(props){
     const classes = useStyle();
     const navigate = useNavigate();
-    const { header, body, backLink, onSubmit } = props;
+    const { header, body, backLink, onSubmit, onError } = props;
     
     
     const [progress, setProgress] = React.useState(0);
     const [nextButtonText, setNextButtonText] = React.useState('Next');
     const [input, setInput] = React.useState('');
     const [errorState, setErrorState] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState('');
 
     let desc = body[progress].desc.split('\n');
     const steps = 'Step '+(progress+1)+' of '+body.length;
@@ -69,7 +68,6 @@ function FormProgress(props){
 
     const handleIncrease = () => {
         setErrorState(false);
-        setErrorMessage('');
         body[progress].setValue(input);
         if(progress<body.length-1)
         {
@@ -90,7 +88,7 @@ function FormProgress(props){
         if(input === '')
         {
             setErrorState(true);
-            setErrorMessage('Field cannot be empty');
+            onError('Field cannot be empty');
         }
         else
         {
@@ -104,7 +102,7 @@ function FormProgress(props){
                 else
                 {
                     setErrorState(true);
-                    setErrorMessage('Input does not match given parameters');
+                    onError('Input does not match given parameters');
                 }
             }
             else
@@ -116,7 +114,6 @@ function FormProgress(props){
     };
     const decreaseProgress = () => {
         setErrorState(false);
-        setErrorMessage('');
         if(progress>0)
         {
             setPercent();
@@ -174,13 +171,6 @@ function FormProgress(props){
                         type={body[progress].type}
                         variant='outlined'/>
                 </form><br/>
-                <Typography
-                    className={classes.desc}
-                    color='error'
-                    component='h3'
-                    variant='caption'>
-                        {errorMessage}
-                </Typography>
                 {
                     desc.map((element, index) => {
                         return<>
