@@ -1,5 +1,9 @@
 import FormProgress from '../../Components/FormProgress';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
+import { signup } from '../../Components/APICaller';
+import Loader from '../../Components/Loader';
+import Toast from '../../Components/Toast';
+import { useNavigate } from 'react-router-dom';
 
 function Signup(props)
 {
@@ -9,14 +13,56 @@ function Signup(props)
     const [password, setPassword] = React.useState("");
     const [contact, setContact] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [toast, setToast] = React.useState({
+        message: '',
+        severity: '',
+        isOpen: false,
+        handleClose: () => {},
+        timeout: 0
+    });
+    const navigate = useNavigate();
 
     const submit = () => {
-        console.log('username', username);
-        console.log('firstName', firstName);
-        console.log('lastName', lastName);
-        console.log('password', password);
-        console.log('email', email);
-        console.log('contact',contact);
+        if(password != ''){
+            const model = {
+                username : username,
+                firstName : firstName,
+                lastName : lastName,
+                password : password,
+                email : email,
+                contactNumber: contact
+            };
+            signup(model, () => {
+                setIsLoading(true);
+                setToast({
+                    message: 'Successfully signed up. Please wait while you are redirected to the login page.',
+                    severity: 'success',
+                    handleClose: () => {
+                        setIsLoading(false);
+                        navigate('/login');
+                    },
+                    isOpen: true,
+                    timeout: 2000
+                });
+            }, (message) => {
+                setIsLoading(false);
+                setToast({
+                    message: message,
+                    severity: 'error',
+                    handleClose: () => {setToast({
+                        message: '',
+                        severity: 'error',
+                        handleClose: () => {},
+                        isOpen: false,
+                        timeout: 0
+                    })},
+                    isOpen: true,
+                    timeout: 4000
+                });
+            });
+        }
+        
     };
     useEffect(() => {
         if(password !== '')
@@ -44,14 +90,16 @@ function Signup(props)
             setValue: (uValue) => setContact(uValue),
             value: contact,
             type: 'text',
-            desc: 'Please enter your 10 digit contact number.\nThis will be used to contact you.'
+            desc: 'Please enter your 10 digit contact number.\nThis will be used to contact you.',
+            pattern: '^[0-9]{10}$'
         },
         {
             text: 'Email',
             setValue: (uValue) => setEmail(uValue),
             value: email,
             type: 'text',
-            desc: 'Please enter your email.\nThis will be used to send you notificaiton.'
+            desc: 'Please enter your email.\nThis will be used to send you notificaiton.',
+            pattern: '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'
         },
         {
             text: 'Username',
@@ -62,18 +110,27 @@ function Signup(props)
         },
         {
             text: 'Password',
-            setValue: (value) => setPassword(value),
+            setValue: (value, callback) => setPassword(value, callback),
             value: password,
             type: 'Password',
-            desc: 'Enter a password.\nIt must, \nbe between 8 to 16 characters long,\n containt atleast 1 special character, \n contain atleast one uppercase and one lowercase alphabet'
+            desc: 'Enter a password. It must contain, \nbetween 8 to 16 characters long,\natleast 1 special character, \natleast one uppercase and one lowercase alphabet',
+            pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_-])(?=.{8,16})'
         }
     ];
     
     return<>
+        <Loader isLoading = {isLoading}/>
+        <Toast 
+            handleClose = {toast.handleClose} 
+            isOpen = {toast.isOpen}
+            message = {toast.message}
+            severity = {toast.severity} 
+            timeout = {toast.timeout}/>
         <FormProgress
             backLink='/login'
             body={body}
-            header={header}/>
+            header={header}
+            onSubmit={submit}/>
     </>
 }
 

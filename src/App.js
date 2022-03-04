@@ -38,41 +38,46 @@ const themes = createTheme({
 
 const useStyles = makeStyles((theme) => {
   return{
-    toolbar: theme.mixins.toolbar
+    toolbar: theme.mixins.toolbar,
+    App: {
+      position: 'relative'
+    }
   }
 });
 
 function App() {
   const classes = useStyles();
   return <>
-    <ThemeProvider theme={themes}>
-      <Box>
-        <Header></Header>
-      </Box>
-      <Box>
-        <div className={classes.toolbar}></div>
-        <Routes>
-          <Route 
-            element = {<Signup/>}
-            exact path = '/signup'/>
-          <Route
-            element = {<Login/>} 
-            exact path = '/login'/> 
-          <Route
-            element = {<Profile/>} 
-            exact path = '/profile'/>
-          <Route
-            element = {<CreateRoute/>} 
-            exact path = '/create-route'/>
-          <Route
-            element = {<Notifications/>} 
-            exact path = '/notifications'/>
-          <Route
-            element = {<Home/>} 
-            path = '/'/>
-        </Routes>
-      </Box> 
-    </ThemeProvider>
+    <div className={classes.App}>
+      <ThemeProvider theme={themes}>
+        <Box>
+          <Header></Header>
+        </Box>
+        <Box>
+          <div className={classes.toolbar}></div>
+          <Routes>
+            <Route 
+              element = {<Signup/>}
+              exact path = '/signup'/>
+            <Route
+              element = {<Login/>} 
+              exact path = '/login'/> 
+            <Route
+              element = {<Profile/>} 
+              exact path = '/profile'/>
+            <Route
+              element = {<CreateRoute/>} 
+              exact path = '/create-route'/>
+            <Route
+              element = {<Notifications/>} 
+              exact path = '/notifications'/>
+            <Route
+              element = {<Home/>} 
+              path = '/'/>
+          </Routes>
+        </Box> 
+      </ThemeProvider>
+    </div>
   </>
 }
 

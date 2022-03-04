@@ -36,8 +36,7 @@ const useStyle = makeStyles(theme => {
     } 
 });
 
-function FormRegular(props)
-{
+function FormRegular(props){
     const classes = useStyle();
     const { header, headerButton, body, footerButton, footerLink } = props;
     const footerLinkTag = footerLink.link ? <Link

@@ -22,11 +22,6 @@ const useStyle = makeStyles(theme => {
             marginBottom: 10,
             display: 'block'
         },
-        footer:{
-            padding: 20,
-            display: 'flex',
-            justifyContent: "flex-end"
-        },
         cardWidth:{
             margin: 'auto',
             marginTop: 30,
@@ -36,21 +31,33 @@ const useStyle = makeStyles(theme => {
             [theme.breakpoints.up('lg')]:{
                 width: '45%'
             }
+        },
+        cardHeight:{
+            minHeight: 300
+        },
+        desc:{
+            paddingLeft: 15
+        },
+        footer:{
+            padding: 20,
+            display: 'flex',
+            justifyContent: "flex-end"
         }
     } 
 });
 
-function FormProgress(props)
-{
+function FormProgress(props){
     const classes = useStyle();
     const navigate = useNavigate();
-    const { header, body, backLink } = props;
+    const { header, body, backLink, onSubmit } = props;
     
     
     const [progress, setProgress] = React.useState(0);
     const [nextButtonText, setNextButtonText] = React.useState('Next');
     const [input, setInput] = React.useState('');
-    
+    const [errorState, setErrorState] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState('');
+
     let desc = body[progress].desc.split('\n');
     const steps = 'Step '+(progress+1)+' of '+body.length;
     let percent = 0;
@@ -60,9 +67,10 @@ function FormProgress(props)
     }
     setPercent();
 
-    const increaseProgress = () => {
+    const handleIncrease = () => {
+        setErrorState(false);
+        setErrorMessage('');
         body[progress].setValue(input);
-        
         if(progress<body.length-1)
         {
             setPercent();
@@ -73,8 +81,42 @@ function FormProgress(props)
                 setNextButtonText('Submit');
             }
         }
+        if(progress === body.length - 1){
+            if(input === body[progress].value)
+                onSubmit();
+        }
+    };
+    const increaseProgress = () => {
+        if(input === '')
+        {
+            setErrorState(true);
+            setErrorMessage('Field cannot be empty');
+        }
+        else
+        {
+            if(body[progress].pattern)
+            {
+                let regex = new RegExp(body[progress].pattern);
+                if(regex.test(input))
+                {
+                    handleIncrease();
+                }
+                else
+                {
+                    setErrorState(true);
+                    setErrorMessage('Input does not match given parameters');
+                }
+            }
+            else
+            {
+                handleIncrease();
+            }
+        }
+            
     };
     const decreaseProgress = () => {
+        setErrorState(false);
+        setErrorMessage('');
         if(progress>0)
         {
             setPercent();
@@ -87,6 +129,13 @@ function FormProgress(props)
             navigate(backLink);
         }
             
+    };
+    const handleChange = (e) => {
+        setInput(e.target.value);
+        if(e.target.value === '')
+            setErrorState(true);
+        else
+            setErrorState(false);
     }
     
     return<>
@@ -109,7 +158,7 @@ function FormProgress(props)
                     </Typography>
                 }
             />
-            <CardContent>
+            <CardContent className={classes.cardHeight}>
                 <form 
                     autoComplete='off'
                     noValidate>
@@ -117,17 +166,26 @@ function FormProgress(props)
                         value={input}
                         className={classes.field}
                         color='secondary'
+                        error={errorState}
                         fullWidth
                         label={body[progress].text}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => handleChange(e)}
                         required
                         type={body[progress].type}
                         variant='outlined'/>
-                </form>
+                </form><br/>
+                <Typography
+                    className={classes.desc}
+                    color='error'
+                    component='h3'
+                    variant='caption'>
+                        {errorMessage}
+                </Typography>
                 {
                     desc.map((element, index) => {
                         return<>
                             <Typography
+                                className={classes.desc}
                                 component='h3'
                                 key={index}
                                 variant='caption'>
