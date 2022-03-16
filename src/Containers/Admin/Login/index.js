@@ -1,18 +1,17 @@
-import FormRegular from '../../Components/FormRegular';
+import FormRegular from '../../../Components/FormRegular';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import SendOutlined from '@mui/icons-material/SendOutlined';
-import { SupervisedUserCircleOutlined } from '@material-ui/icons';
-import Toast from '../../Components/Toast';
-import Loader from '../../Components/Loader';
-import { login } from '../../Components/APICaller';
-import { setLoggedInStatus, setIsAdmin } from '../../Components/Navigation';
+import Toast from '../../../Components/Toast';
+import Loader from '../../../Components/Loader';
+import { login } from '../../../Components/APICaller';
+import { setLoggedInStatus, setIsAdmin } from '../../../Components/Navigation';
 
-function Login(props)
+function AdminLogin(props)
 {
     const navigate = useNavigate();
-    const [username, setUsername] = React.useState("");
+    const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [toast, setToast] = React.useState({
         message: '',
@@ -39,11 +38,11 @@ function Login(props)
         });
     };
 
-    const header = 'Login';
+    const header = 'Admin Login';
     const body = [
         {
-            text: 'Username',
-            onChange: (e) => setUsername(e.target.value),
+            text: 'Email',
+            onChange: (e) => setEmail(e.target.value),
             type: 'text'
         },
         {
@@ -54,27 +53,27 @@ function Login(props)
     ];
     const footerButton = [
         {
-            action: () => {
-                navigate('/');
+            action: (callback) => {
+                navigate('/login');
             },
             icon:<ArrowBackIosNewOutlinedIcon color='Secondary'/>,
             text: 'Back'
         },
         {
             action: () => {
-                if(username === '' || password === '')
+                if(email === '' || password === '')
                     setErrorToast('Please fill all fields');
                 else{
                     setIsLoading(true);
-                    login({username, password}, () => {
+                    login({email, password}, () => {
                         setToast({
                             message: 'Successfully logged in. Please wait while you are redirected to the home page.',
                             severity: 'primary',
                             handleClose: () => {
                                 setIsLoading(false);
                                 setLoggedInStatus(true);
-                                setIsAdmin(false);
-                                navigate('/');
+                                setIsAdmin(true);
+                                navigate('/admin/home');
                             },
                             isOpen: true,
                             timeout: 1000
@@ -82,26 +81,15 @@ function Login(props)
                     }, (message) => {
                         setIsLoading(false);
                         setErrorToast(message);
-                    }, 'user');
+                    }, 'admin');
                 }
             },
             icon:<SendOutlined color='Secondary'/>,
             text: 'Submit'
         }
     ];
-    const footerLink = {
-        text: 'Click here to sign up',
-        link: '/signup'
-    };
-    const headerButton = [
-        {
-            action: () => {
-                navigate('/admin/login');
-            },
-            icon: <SupervisedUserCircleOutlined/>,
-            text: 'Admin Login',
-        }
-    ];    
+    const footerLink = {};
+    const headerButton = [];    
 
     return<>
         <Loader isLoading = {isLoading}/>
@@ -120,4 +108,4 @@ function Login(props)
     </>
 }
 
-export default Login;
+export default AdminLogin;

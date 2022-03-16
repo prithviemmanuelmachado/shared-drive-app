@@ -16,23 +16,33 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie/es6';
+import AddBoxOutlined from '@mui/icons-material/AddBoxOutlined';
+import { isAdminLoggedIn } from '../APICaller';
 
 const useStyles = makeStyles({
     items: {
         width: '400px'
     }
 });
+
 const cookies = new Cookies();
 let loggedInStatus = false;
-
+let isAdmin = false;
+export function setIsAdmin(status){
+    isAdmin = status;
+}
 export function setLoggedInStatus(status){
     loggedInStatus = status;
 }
 
 function Navigation(props){
+    isAdminLoggedIn((status) => {setIsAdmin(status)});
+
     const doesTokenExist = cookies.get('jwt')? true: false;
     if(doesTokenExist != loggedInStatus)
         setLoggedInStatus(doesTokenExist);
+
+    
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     useEffect(() => {
         setIsLoggedIn(loggedInStatus);
@@ -43,87 +53,136 @@ function Navigation(props){
         open,
         toggle
     } = props;
-    
-    const topMenuItems = isLoggedIn?[
-        {
-            name: 'Home',
-            icon: <HomeOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                navigate('/');
-                toggle();
-            } 
-        },
-        {
-            name: 'Notifications',
-            icon: <NotificationsNoneOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                navigate('/notifications');
-                toggle();
-            } 
-        },
-        {
-            name: 'Create Route',
-            icon: <AltRouteOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                navigate('/create-route');
-                toggle();
-            } 
+    let topMenuItems;
+    let bottomMenuItems;
+    if(isLoggedIn){
+        if(isAdmin){
+            topMenuItems = [
+                {
+                    name: 'Home',
+                    icon: <HomeOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        navigate('/admin/home');
+                        toggle();
+                    } 
+                },
+                {
+                    name: 'Additional Information',
+                    icon: <AddBoxOutlined
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        navigate('/admin/additional-information');
+                        toggle();
+                    } 
+                }
+            ];
+            bottomMenuItems = [
+                {
+                    name: 'Logout',
+                    icon: <LogoutOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        toggle();
+                        cookies.remove('jwt');
+                        setIsAdmin(false);
+                        setLoggedInStatus(false);
+                        navigate('/');
+                    }
+                }
+            ];
         }
-    ] : 
-    [
-        {
-            name: 'Home',
-            icon: <HomeOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                navigate('/');
-                toggle();
-            } 
+        else{
+            topMenuItems = [
+                {
+                    name: 'Home',
+                    icon: <HomeOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        navigate('/');
+                        toggle();
+                    } 
+                },
+                {
+                    name: 'Notifications',
+                    icon: <NotificationsNoneOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        navigate('/notifications');
+                        toggle();
+                    } 
+                },
+                {
+                    name: 'Create Route',
+                    icon: <AltRouteOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        navigate('/create-route');
+                        toggle();
+                    } 
+                }
+            ];
+            bottomMenuItems = [
+                {
+                    name: 'Profile',
+                    icon: <AccountCircleOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        navigate('/profile');
+                        toggle();
+                    } 
+                },
+                {
+                    name: 'Logout',
+                    icon: <LogoutOutlinedIcon
+                            color='primary'
+                            fontSize='medium'/>,
+                    onClick: () => {
+                        toggle();
+                        cookies.remove('jwt');
+                        setIsAdmin(false);
+                        setLoggedInStatus(false);
+                        navigate('/');
+                    }
+                }
+                
+            ];
         }
-    ];
-    const bottomMenuItems = isLoggedIn?[
-        {
-            name: 'Logout',
-            icon: <LogoutOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                cookies.remove('jwt');
-                toggle();
-                setLoggedInStatus(false);
+    }
+    else{
+        topMenuItems = [
+            {
+                name: 'Home',
+                icon: <HomeOutlinedIcon
+                        color='primary'
+                        fontSize='medium'/>,
+                onClick: () => {
+                    navigate('/');
+                    toggle();
+                } 
             }
-        },
-        {
-            name: 'Profile',
-            icon: <AccountCircleOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                navigate('/profile');
-                toggle();
-            } 
-        }
-
-    ] :
-    [
-        {
-            name: 'Login',
-            icon: <LoginOutlinedIcon
-                    color='primary'
-                    fontSize='medium'/>,
-            onClick: () => {
-                navigate('/login');
-                toggle();
-            } 
-        }
-    ];
+        ];
+        bottomMenuItems = [
+            {
+                name: 'Login',
+                icon: <LoginOutlinedIcon
+                        color='primary'
+                        fontSize='medium'/>,
+                onClick: () => {
+                    navigate('/login');
+                    toggle();
+                } 
+            }
+        ];
+    }
+    
     return<>
         <Drawer
             anchor={'right'}

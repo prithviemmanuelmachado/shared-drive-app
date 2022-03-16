@@ -20,6 +20,7 @@ import Box from '@material-ui/core/Box';
 import Profile from './Containers/Profile';
 import CreateRoute from './Containers/CreateRoute';
 import Notifications from './Containers/Notifications';
+import AdminLogin from './Containers/Admin/Login';
 
 const themes = createTheme({
   palette:{
@@ -56,6 +57,9 @@ function App() {
         <Box>
           <div className={classes.toolbar}></div>
           <Routes>
+            <Route
+              element = {<AdminLogin/>}
+              exact path='/admin/login'/>
             <Route 
               element = {<Signup/>}
               exact path = '/signup'/>

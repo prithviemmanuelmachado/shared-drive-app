@@ -142,7 +142,7 @@ function FormProgress(props){
             <CardHeader
                 title = {
                 <Typography
-                    color='secondary'
+                    color='primary'
                     component='h2'
                     variant='h6'>
                     {header}

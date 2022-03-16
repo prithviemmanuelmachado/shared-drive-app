@@ -28,13 +28,13 @@ export function signup(userModel, successCallBack, errorCallBack){
     .catch(err => console.log(err));
 }
 
-export function userLogin(userModel, successCallBack, errorCallBack){
+export function login(userModel, successCallBack, errorCallBack, role){
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userModel)
     };
-    fetch(serverBaseURI+'/user/userLogin', requestOptions)
+    fetch(serverBaseURI+'/user/' + role + 'Login', requestOptions)
     .then(res => {
         if(res.status === 400 || res.status === 500){
             res.json()
@@ -50,6 +50,48 @@ export function userLogin(userModel, successCallBack, errorCallBack){
             })
             
         } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function isAdminLoggedIn(callback){
+    fetch(serverBaseURI+'/user/isAdminLoggedIn', {
+        method: 'GET',
+        headers: {
+            'jwt': cookies.get('jwt')
+        }
+    })
+    .then(res => {
+        res.json()
+        .then(data => {
+            callback(data);
+        });
+    })
+    .catch(err => console.log(err));
+}
+
+export function getProfile(successCallBack, errorCallBack, user){
+    const search = user == null ?  'self' : user;
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'jwt': cookies.get('jwt')
+        }
+    };
+    fetch(serverBaseURI+'/profile/getProfile?user='+encodeURIComponent(search), requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => {
+                successCallBack(data);
+            }); 
+        }
     })
     .catch(err => console.log(err));
 }

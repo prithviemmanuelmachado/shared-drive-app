@@ -16,7 +16,7 @@ function Signup(props)
     const [isLoading, setIsLoading] = React.useState(false);
     const [toast, setToast] = React.useState({
         message: '',
-        severity: '',
+        severity: 'error',
         isOpen: false,
         handleClose: () => {},
         timeout: 0
@@ -51,7 +51,7 @@ function Signup(props)
                 setIsLoading(true);
                 setToast({
                     message: 'Successfully signed up. Please wait while you are redirected to the login page.',
-                    severity: 'success',
+                    severity: 'primary',
                     handleClose: () => {
                         setIsLoading(false);
                         navigate('/login');

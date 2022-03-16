@@ -70,7 +70,7 @@ function FormRegular(props){
                 }
                 title = {
                 <Typography
-                    color='secondary'
+                    color='primary'
                     component='h2'
                     variant='h6'>
                     {header}
