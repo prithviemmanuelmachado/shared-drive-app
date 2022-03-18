@@ -92,7 +92,7 @@ function Profile(props)
     };
 
     const handleEdit = () => {
-        console.log('edit');
+        console.log('goto edit');
     };
 
     useEffect(() => {
@@ -105,7 +105,7 @@ function Profile(props)
                     onClick={handleEdit}
                     startIcon={<EditOutlinedIcon color='Secondary'/>}
                     variant='outlined'>
-                    Edit
+                    EDIT
                 </Button>);
             }
         }, (msg) => {

@@ -21,6 +21,8 @@ import Profile from './Containers/Profile';
 import CreateRoute from './Containers/CreateRoute';
 import Notifications from './Containers/Notifications';
 import AdminLogin from './Containers/Admin/Login';
+import AdditionalInformation from './Containers/Admin/AdditionalInformation';
+import AdminHome from './Containers/Admin/AdminHome';
 
 const themes = createTheme({
   palette:{
@@ -60,6 +62,12 @@ function App() {
             <Route
               element = {<AdminLogin/>}
               exact path='/admin/login'/>
+            <Route
+              element = {<AdditionalInformation/>}
+              exact path='/admin/additional-information'/>
+            <Route
+              element = {<AdminHome/>}
+              exact path='/admin/home'/>
             <Route 
               element = {<Signup/>}
               exact path = '/signup'/>

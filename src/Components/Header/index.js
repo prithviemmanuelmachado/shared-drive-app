@@ -29,7 +29,7 @@ function Header(props){
     return<>
         <AppBar
             className={classes.border}
-            color='transparent'>
+            color='white'>
             <Toolbar>
                 <Typography
                     className={classes.flexBox}
