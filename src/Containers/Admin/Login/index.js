@@ -43,11 +43,13 @@ function AdminLogin(props)
         {
             text: 'Email',
             onChange: (e) => setEmail(e.target.value),
+            value: email,
             type: 'text'
         },
         {
             text: 'Password',
             onChange: (e) => setPassword(e.target.value),
+            value: password,
             type: 'password'
         }
     ];
@@ -57,7 +59,7 @@ function AdminLogin(props)
                 navigate('/login');
             },
             icon:<ArrowBackIosNewOutlinedIcon color='Secondary'/>,
-            text: 'Back'
+            text: 'BACK'
         },
         {
             action: () => {
@@ -85,7 +87,7 @@ function AdminLogin(props)
                 }
             },
             icon:<SendOutlined color='Secondary'/>,
-            text: 'Submit'
+            text: 'SUBMIT'
         }
     ];
     const footerLink = {};

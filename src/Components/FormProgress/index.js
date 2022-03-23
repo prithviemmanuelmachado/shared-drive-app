@@ -53,7 +53,7 @@ function FormProgress(props){
     
     
     const [progress, setProgress] = React.useState(0);
-    const [nextButtonText, setNextButtonText] = React.useState('Next');
+    const [nextButtonText, setNextButtonText] = React.useState('NEXT');
     const [input, setInput] = React.useState('');
     const [errorState, setErrorState] = React.useState(false);
 
@@ -76,7 +76,7 @@ function FormProgress(props){
             setInput(body[progress+1].value);
             if(progress === body.length - 2)
             {
-                setNextButtonText('Submit');
+                setNextButtonText('SUBMIT');
             }
         }
         if(progress === body.length - 1){
@@ -119,7 +119,7 @@ function FormProgress(props){
             setPercent();
             setProgress(progress-1);
             setInput(body[progress-1].value);
-            setNextButtonText('Next');
+            setNextButtonText('NEXT');
         }    
         else
         {
@@ -162,7 +162,7 @@ function FormProgress(props){
                     <TextField
                         value={input}
                         className={classes.field}
-                        color='secondary'
+                        color='primary'
                         error={errorState}
                         fullWidth
                         label={body[progress].text}
@@ -193,7 +193,7 @@ function FormProgress(props){
                         onClick={decreaseProgress}
                         startIcon={<ArrowBackIosNewOutlinedIcon/>}
                         variant='outlined'>
-                        Back
+                        BACK
                     </Button>
                     <Button
                         color='secondary'

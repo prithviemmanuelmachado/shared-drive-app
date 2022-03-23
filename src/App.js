@@ -23,6 +23,7 @@ import Notifications from './Containers/Notifications';
 import AdminLogin from './Containers/Admin/Login';
 import AdditionalInformation from './Containers/Admin/AdditionalInformation';
 import AdminHome from './Containers/Admin/AdminHome';
+import UpdateProfile from './Containers/UpdateProfile';
 
 const themes = createTheme({
   palette:{
@@ -77,6 +78,9 @@ function App() {
             <Route
               element = {<Profile/>} 
               exact path = '/profile'/>
+            <Route
+              element = {<UpdateProfile/>}
+              exact path='/update-profile'/>
             <Route
               element = {<CreateRoute/>} 
               exact path = '/create-route'/>
