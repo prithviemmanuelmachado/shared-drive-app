@@ -87,12 +87,13 @@ function FormRegular(props){
                                     key={element.text}>
                                     <TextField
                                     className={classes.field}
-                                    color='secondary'
+                                    color='primary'
                                     fullWidth
                                     label={element.text}
                                     onChange={element.onChange}
                                     required
                                     type={element.type}
+                                    value={element.value}
                                     variant='outlined'/>
                                 </div>
                             </>

@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@mui/material/Grid";
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getProfile } from "../../Components/APICaller";
 import Loader from "../../Components/Loader";
 import Toast from "../../Components/Toast";
@@ -52,6 +52,7 @@ function useQuery(){
 function Profile(props)
 {
     const query = useQuery();
+    const navigate = useNavigate();
     const user = query.get("user");
     const classes = useStyle();
     const [isLoading, setIsLoading] = React.useState(true);
@@ -92,7 +93,7 @@ function Profile(props)
     };
 
     const handleEdit = () => {
-        console.log('goto edit');
+        navigate('/update-profile');
     };
 
     useEffect(() => {

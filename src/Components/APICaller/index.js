@@ -174,3 +174,61 @@ export function deleteInformationBasedOnID(successCallBack, errorCallBack, id){
     })
     .catch(err => console.log(err));
 }
+
+export function updateProfile(successCallBack, errorCallBack, model){
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json', 
+            'jwt': cookies.get('jwt')
+        },
+        body: JSON.stringify({profile: model})
+    };
+    fetch(serverBaseURI+'/profile/updateProfile', requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data.success);
+            });
+            
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function updateProfileAddInformation(successCallBack, errorCallBack, model){
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+                    'Content-Type': 'application/json', 
+                    'jwt': cookies.get('jwt')
+                },
+        body: JSON.stringify({newInfo : model})
+    };
+    console.log(model);
+    fetch(serverBaseURI+'/profile/addAdditionalInformation', requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                console.log(data);
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data.success);
+            });
+            
+        } 
+    })
+    .catch(err => console.log(err));
+}

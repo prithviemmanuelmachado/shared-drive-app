@@ -44,11 +44,13 @@ function Login(props)
         {
             text: 'Username',
             onChange: (e) => setUsername(e.target.value),
+            value: username,
             type: 'text'
         },
         {
             text: 'Password',
             onChange: (e) => setPassword(e.target.value),
+            value: password,
             type: 'password'
         }
     ];
@@ -58,7 +60,7 @@ function Login(props)
                 navigate('/');
             },
             icon:<ArrowBackIosNewOutlinedIcon color='Secondary'/>,
-            text: 'Back'
+            text: 'BACK'
         },
         {
             action: () => {
@@ -86,7 +88,7 @@ function Login(props)
                 }
             },
             icon:<SendOutlined color='Secondary'/>,
-            text: 'Submit'
+            text: 'SUBMIT'
         }
     ];
     const footerLink = {
@@ -99,7 +101,7 @@ function Login(props)
                 navigate('/admin/login');
             },
             icon: <SupervisedUserCircleOutlined/>,
-            text: 'Admin Login',
+            text: 'ADMIN LOGIN',
         }
     ];    
 
