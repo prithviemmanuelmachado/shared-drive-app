@@ -1,7 +1,9 @@
 import settings from '../../settings.json';
 import Cookies from 'universal-cookie/es6';
+import secrets from '../../secrets.json';
+import Geocode from 'react-geocode';
 
-const serverBaseURI = settings[0].serverURI;
+const serverBaseURI = settings.serverURI;
 const cookies = new Cookies();
 
 export function signup(userModel, successCallBack, errorCallBack){
@@ -228,6 +230,47 @@ export function updateProfileAddInformation(successCallBack, errorCallBack, mode
                 successCallBack(data.success);
             });
             
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function getGoeLoc(successCallBack, errorCallBack, model){
+    const apiKey = secrets.GoeApiKey;
+    Geocode.setApiKey(apiKey);
+    Geocode.fromLatLng(model.lat, model.lng).then(
+        (response) => {
+            const address = response.results[0].formatted_address;
+            successCallBack(address);
+        },
+        (error) => {
+            errorCallBack(error);
+        }
+    );
+}
+
+export function createRoute(successCallBack, errorCallBack, model){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+                    'Content-Type': 'application/json',
+                    'jwt': cookies.get('jwt')
+                },
+        body: JSON.stringify(model)
+    };
+    fetch(serverBaseURI+'/route/createRoute', requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack();
+            });
         } 
     })
     .catch(err => console.log(err));

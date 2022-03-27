@@ -120,7 +120,7 @@ function UpdateProfile(props){
                 });
             },
             isOpen: true,
-            timeout: 1000
+            timeout: 4000
         });
     }
 
@@ -227,14 +227,28 @@ function UpdateProfile(props){
         {
             action: () => {
                 setIsLoading(true);
-                updateProfile((msg) => {
+                let isEmpty = profile.username === '' ||
+                                profile.firstName === '' ||
+                                profile.lastName === '' ||
+                                profile.contactNumber === '' ||
+                                profile.email === '';
+                profile.additionalInformation.forEach(item => {
+                    isEmpty = isEmpty || item.value === '';
+                });
+                if(isEmpty){
                     setIsLoading(false);
-                    setSuccessToast(msg);
-                    setFlip(!flip);
-                }, (msg) => {
-                    setIsLoading(false);
-                    setErrorToast(msg);
-                }, profile);
+                    setErrorToast('Please fill all required fields')
+                }
+                else{
+                    updateProfile((msg) => {
+                        setIsLoading(false);
+                        setSuccessToast(msg);
+                        setFlip(!flip);
+                    }, (msg) => {
+                        setIsLoading(false);
+                        setErrorToast(msg);
+                    }, profile);
+                }
             },
             icon: <SendOutlined color='Secondary'/>,
             text: 'UPDATE',
@@ -267,57 +281,55 @@ function UpdateProfile(props){
             className={classes.cardWidth}
             variant='outlined'>
             <CardContent>
-                <Grid>
+                <Grid
+                    className={classes.row} 
+                    container
+                    spacing={1}>
                     <Grid
-                        className={classes.row} 
-                        container
-                        spacing={1}>
-                        <Grid
-                            className = {classes.center}
-                            item
-                            md={4} 
-                            sm={5}
-                            xs={12}
-                            zeroMinWidth>
-                            <FormControl fullWidth>
-                                <InputLabel id='label'>Additional Information</InputLabel>
-                                <Select
-                                    id='select'
-                                    labelId='label'
-                                    value={sInformation}
-                                    onChange={handleInformationChange}>
-                                    {
-                                        information.map((element, index) => {
-                                            return(
-                                                <MenuItem
-                                                    key={element._id} 
-                                                    value={element.additionalInformation}>
-                                                    {element.additionalInformation}
-                                                </MenuItem>
-                                            )
-                                        })
-                                    }
-                                    
-                                </Select>
+                        className = {classes.center}
+                        item
+                        md={4} 
+                        sm={5}
+                        xs={12}
+                        zeroMinWidth>
+                        <FormControl fullWidth>
+                            <InputLabel id='label'>Additional Information</InputLabel>
+                            <Select
+                                id='select'
+                                labelId='label'
+                                value={sInformation}
+                                onChange={handleInformationChange}>
+                                {
+                                    information.map((element, index) => {
+                                        return(
+                                            <MenuItem
+                                                key={element._id} 
+                                                value={element.additionalInformation}>
+                                                {element.additionalInformation}
+                                            </MenuItem>
+                                        )
+                                    })
+                                }
                                 
-                            </FormControl> 
+                            </Select>
                             
-                        </Grid>
-                        <Grid
-                            className = {classes.center}
-                            item
-                            md={8} 
-                            sm={12}
-                            xs={12}
-                            zeroMinWidth> 
-                                <TextField
-                                    className={classes.field}
-                                    hiddenLabel
-                                    fullWidth
-                                    onChange = {(e) => { setInput(e.target.value); } }
-                                    value = {input}
-                                    variant="outlined"/>
-                        </Grid>
+                        </FormControl> 
+                        
+                    </Grid>
+                    <Grid
+                        className = {classes.center}
+                        item
+                        md={8} 
+                        sm={12}
+                        xs={12}
+                        zeroMinWidth> 
+                            <TextField
+                                className={classes.field}
+                                hiddenLabel
+                                fullWidth
+                                onChange = {(e) => { setInput(e.target.value); } }
+                                value = {input}
+                                variant="outlined"/>
                     </Grid>
                 </Grid>
             </CardContent>
