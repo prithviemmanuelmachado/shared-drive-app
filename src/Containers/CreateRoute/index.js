@@ -72,7 +72,7 @@ function CreateRoute(props)
     const [days, setDays] = React.useState([]);
     const [from, setFrom] = useState('Please select a location');
     const [to, setTo] = useState('Please select a location');
-    const [clickMarkerLoc, setClickMarkerLocs] = useState({});
+    const [clickMarkerLoc, setClickMarkerLocs] = useState(null);
     const [selected, setSelected] = useState('From');
     const [fromLocation, setFromLocation] = useState({lat: 0, lng: 0});
     const [toLocation, setToLocation] = useState({lat: 0, lng: 0});
@@ -109,9 +109,10 @@ function CreateRoute(props)
             severity: 'primary',
             handleClose: () => {
                 navigate('/');
+                window.location.reload(false);
             },
             isOpen: true,
-            timeout: 4000
+            timeout: 1500
         });
     };
 

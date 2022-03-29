@@ -36,7 +36,16 @@ export function setLoggedInStatus(status){
 }
 
 function Navigation(props){
-    isAdminLoggedIn((status) => {setIsAdmin(status)});
+    const navigate = useNavigate();
+    const logout = () => {
+        toggle();
+        cookies.remove('jwt');
+        setIsAdmin(false);
+        setLoggedInStatus(false);
+        navigate('/');
+        window.location.reload();
+    };
+    isAdminLoggedIn((status) => {setIsAdmin(status)}, () => {logout();});
 
     const doesTokenExist = cookies.get('jwt')? true: false;
     if(doesTokenExist != loggedInStatus)
@@ -47,7 +56,6 @@ function Navigation(props){
     useEffect(() => {
         setIsLoggedIn(loggedInStatus);
     } , [loggedInStatus]);
-    const navigate = useNavigate();
     const classes =  useStyles();
     const {
         open,
@@ -86,11 +94,7 @@ function Navigation(props){
                             color='primary'
                             fontSize='medium'/>,
                     onClick: () => {
-                        toggle();
-                        cookies.remove('jwt');
-                        setIsAdmin(false);
-                        setLoggedInStatus(false);
-                        navigate('/');
+                        logout();
                     }
                 }
             ];
@@ -104,6 +108,7 @@ function Navigation(props){
                             fontSize='medium'/>,
                     onClick: () => {
                         navigate('/');
+                        window.location.reload(false);
                         toggle();
                     } 
                 },
@@ -145,11 +150,7 @@ function Navigation(props){
                             color='primary'
                             fontSize='medium'/>,
                     onClick: () => {
-                        toggle();
-                        cookies.remove('jwt');
-                        setIsAdmin(false);
-                        setLoggedInStatus(false);
-                        navigate('/');
+                        logout();
                     }
                 }
                 
@@ -165,6 +166,7 @@ function Navigation(props){
                         fontSize='medium'/>,
                 onClick: () => {
                     navigate('/');
+                    window.location.reload(false);
                     toggle();
                 } 
             }

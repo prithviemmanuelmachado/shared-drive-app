@@ -29,17 +29,19 @@ function MapInput(props){
     const classes = useStyle();
 
     useEffect(() => {
-        getGoeLoc((addr) => {
-            if(selected === 'From')
-                setFrom(addr);
-            else if(selected === 'To')
-                setTo(addr);
-            else
-                setErrorToast('Please select destination type');
-        }, (err) => {
-            setErrorToast('Unable to get address');
-            console.log(err);
-        }, clickMarkerLoc);
+        if(clickMarkerLoc){
+            getGoeLoc((addr) => {
+                if(selected === 'From')
+                    setFrom(addr);
+                else if(selected === 'To')
+                    setTo(addr);
+                else
+                    setErrorToast('Please select destination type');
+            }, (err) => {
+                setErrorToast('Unable to get address');
+                console.log(err);
+            }, clickMarkerLoc);
+        }
     },[clickMarkerLoc]);
 
     return<>
@@ -119,12 +121,13 @@ function MapInput(props){
                     variant={ selected==='To'? 'contained' : 'outlined' }>
                     TO
                 </Button> 
-            </Grid> 
+            </Grid>
         </Grid>                      
         <Map
             clickable={true}
             clickMarkerLoc={clickMarkerLoc}
-            setClickMarkerLocs={setClickMarkerLocs}/>
+            setClickMarkerLocs={setClickMarkerLocs}
+            markers={[]}/>
             
     </>
 }

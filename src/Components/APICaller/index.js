@@ -56,7 +56,7 @@ export function login(userModel, successCallBack, errorCallBack, role){
     .catch(err => console.log(err));
 }
 
-export function isAdminLoggedIn(callback){
+export function isAdminLoggedIn(callback, logout){
     fetch(serverBaseURI+'/user/isAdminLoggedIn', {
         method: 'GET',
         headers: {
@@ -64,10 +64,18 @@ export function isAdminLoggedIn(callback){
         }
     })
     .then(res => {
-        res.json()
-        .then(data => {
-            callback(data);
-        });
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                logout();
+            });
+        }
+        else{
+            res.json()
+            .then(data => {
+                callback(data);
+            }); 
+        }
     })
     .catch(err => console.log(err));
 }
@@ -270,6 +278,31 @@ export function createRoute(successCallBack, errorCallBack, model){
             res.json()
             .then(data => { 
                 successCallBack();
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function getRoutesByProximity(successCallBack, errorCallBack, model){
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'jwt': cookies.get('jwt')
+        }
+    };
+    fetch(serverBaseURI+'/route/getRoutesByProximity?lng='+model.lng+'&lat='+model.lat, requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data);
             });
         } 
     })
