@@ -58,6 +58,7 @@ function Login(props)
         {
             action: () => {
                 navigate('/');
+                window.location.reload();
             },
             icon:<ArrowBackIosNewOutlinedIcon color='Secondary'/>,
             text: 'BACK'
@@ -77,6 +78,7 @@ function Login(props)
                                 setLoggedInStatus(true);
                                 setIsAdmin(false);
                                 navigate('/');
+                                window.location.reload();
                             },
                             isOpen: true,
                             timeout: 1000

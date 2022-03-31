@@ -48,7 +48,7 @@ function RouteCard(props){
     const createdBy = route.createdBy;
     const toCoords = route.toLocation.coordinates;
     const fromCoords = route.fromLocation.coordinates;
-    const [loc, setLoc] = useState({ lng: 77.5946, lat: 12.9716 });
+    const [clickMarkerLoc, setClickMarkerLocs] = useState(null);
     const coords = [
         {
             pos: {
@@ -63,10 +63,6 @@ function RouteCard(props){
                 lat: fromCoords[1]
             },
             name: 'From'
-        },
-        {
-            pos: loc,
-            name: 'Me'
         }
     ]
     let daysOfTravelString = '';
@@ -74,15 +70,6 @@ function RouteCard(props){
         daysOfTravelString += daysOfTravel[i] + ' | '
     }
     daysOfTravelString += daysOfTravel[daysOfTravel.length -1];
-    
-    navigator.geolocation.getCurrentPosition((pos) => {
-        if(pos){
-            setLoc({
-                lng: pos.coords.longitude,
-                lat: pos.coords.latitude
-            });
-        }
-    }, () => {}, {enableHighAccuracy: true});
     
     return<>
         <Accordion 
@@ -243,9 +230,9 @@ function RouteCard(props){
                     container
                     spacing={2}>
                         <Map
-                            clickable={false}
-                            clickMarkerLoc={[]}
-                            setClickMarkerLocs={() => {}}
+                            clickable={true}
+                            clickMarkerLoc={clickMarkerLoc}
+                            setClickMarkerLocs={setClickMarkerLocs}
                             markers={coords}/>
                 </Grid>
                 

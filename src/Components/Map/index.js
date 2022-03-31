@@ -1,6 +1,6 @@
 import secrets from "../../secrets.json";
 import { GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 
 const useStyle = makeStyles(theme => {
@@ -24,17 +24,33 @@ function Map(props){
       width: '100%',
       height: '50vh',
       marginTop: '20px'
-    };
-    const setMapInitLoc = (pos) => {
+    }; 
+    
+    const showError = (error) => {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          setLoc({ lng: 77.5946, lat: 12.9716 });
+          break;
+        case error.POSITION_UNAVAILABLE:
+          setLoc({ lng: 77.5946, lat: 12.9716 });
+          break;
+        case error.TIMEOUT:
+          setLoc({ lng: 77.5946, lat: 12.9716 });
+          break;
+        case error.UNKNOWN_ERROR:
+          setLoc({ lng: 77.5946, lat: 12.9716 });
+          break;
+      }
+    }
+    navigator.geolocation.getCurrentPosition((pos) => {
       if(pos){
           setLoc({
               lng: pos.coords.longitude,
               lat: pos.coords.latitude
           });
       }
-    };
-  
-    navigator.geolocation.getCurrentPosition(setMapInitLoc);
+    }, showError, {enableHighAccuracy: true});
+    
     const onLoad = React.useCallback(function callback(map) {
       const bounds = new window.google.maps.LatLngBounds();
       map.fitBounds(bounds);
@@ -67,9 +83,10 @@ function Map(props){
         }
         {
           markers.length !== 0 ? 
-          markers.map((element, index) => {
+          markers.map((element, index) => 
+          {
             return (<Marker
-              key={element.lat+'_'+element.lng}
+              key={element.pos.lat+'_'+element.pos.lng}
               position = {element.pos}
               label={element.name}/> )
           }):

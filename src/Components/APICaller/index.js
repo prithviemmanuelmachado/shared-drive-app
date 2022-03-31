@@ -308,3 +308,16 @@ export function getRoutesByProximity(successCallBack, errorCallBack, model){
     })
     .catch(err => console.log(err));
 }
+
+export function getGeoCoords(successCallBack, errorCallBack, searchTerm){
+    const apiKey = secrets.GoeApiKey;
+    Geocode.setApiKey(apiKey);
+    Geocode.fromAddress(searchTerm).then(
+        (response) => {
+            successCallBack(response.results[0].geometry.location);
+        },
+        (error) => {
+            errorCallBack(error);
+        }
+    );
+}
