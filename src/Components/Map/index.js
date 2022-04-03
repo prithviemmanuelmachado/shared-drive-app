@@ -42,6 +42,7 @@ function Map(props){
           break;
       }
     }
+    
     navigator.geolocation.getCurrentPosition((pos) => {
       if(pos){
           setLoc({

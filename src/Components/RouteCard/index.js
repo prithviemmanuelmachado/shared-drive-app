@@ -6,8 +6,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
-import Map from '../../Components/Map';
+import Map from '../../Components/Map'
 import { useState } from 'react';
+import Button from '@material-ui/core/Button';
+import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';
+import { createRequest } from '../APICaller';
 
 const useStyle = makeStyles(theme => {
     return{
@@ -30,6 +33,10 @@ const useStyle = makeStyles(theme => {
                 color: theme.palette.secondary.main,
                 cursor: 'pointer'
             }
+        },
+        footer: {
+            display: 'flex',
+            justifyContent: 'flex-end'
         }
     } 
 });
@@ -38,7 +45,7 @@ const useStyle = makeStyles(theme => {
 function RouteCard(props){
     const classes = useStyle();
     const navigate = useNavigate();
-    const { route, expanded, handleExpand } = props;
+    const { route, expanded, handleExpand, setErrorToast, setSuccessToast } = props;
     const fromAddress = route.fromLocation.address;
     const toAddress = route.toLocation.address;
     const daysOfTravel = route.daysOfTravel;
@@ -48,6 +55,7 @@ function RouteCard(props){
     const createdBy = route.createdBy;
     const toCoords = route.toLocation.coordinates;
     const fromCoords = route.fromLocation.coordinates;
+    const routeId = route._id;
     const [clickMarkerLoc, setClickMarkerLocs] = useState(null);
     const coords = [
         {
@@ -70,6 +78,25 @@ function RouteCard(props){
         daysOfTravelString += daysOfTravel[i] + ' | '
     }
     daysOfTravelString += daysOfTravel[daysOfTravel.length -1];
+
+    const handleClick = () => {
+        if(clickMarkerLoc === null){
+            setErrorToast('Please select a pickup location if you wish to join a route');
+        }
+        else{
+            const model = {
+                routeId: routeId,
+                lng: clickMarkerLoc.lng,
+                lat: clickMarkerLoc.lat,
+                author: createdBy
+            };
+            createRequest((msg) => {
+                setSuccessToast(msg);
+            }, (msg) => {
+                setErrorToast(msg);
+            }, model);
+        }
+    }
     
     return<>
         <Accordion 
@@ -125,118 +152,129 @@ function RouteCard(props){
             </Grid>                        
         </AccordionSummary>
         <AccordionDetails>
-            <Grid
-                className = {classes.fullWidth + ' ' + classes.body}>
+            <Grid className={classes.fullWidth}>
                 <Grid
-                    container
-                    spacing={2}>
+                    className = {classes.body}>
+                    <Grid
+                        container
+                        spacing={2}>
+                        <Grid
+                            className={classes.row}
+                            item 
+                            md={2}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>Created by</Typography>
+                        </Grid>
+                        <Grid
+                            onClick={ () => {
+                                navigate('/profile?user='+createdBy);
+                            }}
+                            className={classes.border + ' ' + classes.row}
+                            item 
+                            md={10}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography className={classes.clickable}>{createdBy}</Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        container
+                        spacing={2}>
+                        <Grid
+                            className={classes.row}
+                            item 
+                            md={2}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>Time of Departure</Typography>
+                        </Grid>
+                        <Grid
+                            className={classes.border + ' ' + classes.row}
+                            item 
+                            lg={3} 
+                            md={10}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>{timeOfDeparture}</Typography>
+                        </Grid>
+                        <Grid
+                            className={classes.row}
+                            item
+                            lg={2} 
+                            md={2}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>Days of Travel</Typography>
+                        </Grid>
+                        <Grid
+                            className={classes.border + ' ' + classes.row}
+                            item
+                            lg={5} 
+                            md={8}
+                            xs={12}
+                            zeroMinWidth>
+                                <Typography>{daysOfTravelString}</Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        container
+                        spacing={2}>
+                        <Grid
+                            className={classes.row}
+                            item 
+                            md={2}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>No Of Seats</Typography>
+                        </Grid>
+                        <Grid
+                            className={classes.border + ' ' + classes.row}
+                            item 
+                            md={3}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>{noOfSeats}</Typography>
+                        </Grid>
+                        <Grid
+                            className={classes.row}
+                            item 
+                            md={2}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>No Of Available Seats</Typography>
+                        </Grid>
+                        <Grid
+                            className={classes.border + ' ' + classes.row}
+                            item 
+                            md={3}
+                            xs={12}
+                            zeroMinWidth> 
+                            <Typography>{noOfAvailableSeats}</Typography>
+                        </Grid>
+                    </Grid>
                     <Grid
                         className={classes.row}
-                        item 
-                        md={2}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>Created by</Typography>
+                        container
+                        spacing={2}>
+                            <Map
+                                clickable={true}
+                                clickMarkerLoc={clickMarkerLoc}
+                                setClickMarkerLocs={setClickMarkerLocs}
+                                markers={coords}/>
                     </Grid>
-                    <Grid
-                        onClick={ () => {
-                            navigate('/profile?user='+createdBy);
-                        }}
-                        className={classes.border + ' ' + classes.row}
-                        item 
-                        md={10}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography className={classes.clickable}>{createdBy}</Typography>
-                    </Grid>
-                </Grid>
+                </Grid>    
                 <Grid
-                    container
-                    spacing={2}>
-                    <Grid
-                        className={classes.row}
-                        item 
-                        md={2}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>Time of Departure</Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.border + ' ' + classes.row}
-                        item 
-                        lg={3} 
-                        md={10}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>{timeOfDeparture}</Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.row}
-                        item
-                        lg={2} 
-                        md={2}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>Days of Travel</Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.border + ' ' + classes.row}
-                        item
-                        lg={5} 
-                        md={8}
-                        xs={12}
-                        zeroMinWidth>
-                            <Typography>{daysOfTravelString}</Typography>
-                    </Grid>
+                    className = {classes.footer}>
+                    <Button
+                        color='secondary'
+                        onClick={handleClick}
+                        startIcon={<AddLocationAltOutlinedIcon/>}
+                        variant='outlined'>
+                        REQUEST TO JOIN ROUTE
+                    </Button>            
                 </Grid>
-                <Grid
-                    container
-                    spacing={2}>
-                    <Grid
-                        className={classes.row}
-                        item 
-                        md={2}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>No Of Seats</Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.border + ' ' + classes.row}
-                        item 
-                        md={3}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>{noOfSeats}</Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.row}
-                        item 
-                        md={2}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>No Of Available Seats</Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.border + ' ' + classes.row}
-                        item 
-                        md={3}
-                        xs={12}
-                        zeroMinWidth> 
-                        <Typography>{noOfAvailableSeats}</Typography>
-                    </Grid>
-                </Grid>
-                <Grid
-                    className={classes.row}
-                    container
-                    spacing={2}>
-                        <Map
-                            clickable={true}
-                            clickMarkerLoc={clickMarkerLoc}
-                            setClickMarkerLocs={setClickMarkerLocs}
-                            markers={coords}/>
-                </Grid>
-                
-            </Grid>           
+            </Grid>
         </AccordionDetails>
       </Accordion>
     </>

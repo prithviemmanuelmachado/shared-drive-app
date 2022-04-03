@@ -83,6 +83,22 @@ function Home(props)
         });
     };
     
+    const setSuccessToast = (message) => {
+        setToast({
+            message: message,
+            severity: 'primary',
+            handleClose: () => {setToast({
+                message: '',
+                severity: 'primary',
+                handleClose: () => {},
+                isOpen: false,
+                timeout: 0
+            })},
+            isOpen: true,
+            timeout: 1500
+        });
+    };
+
     const setMapInitLoc = (pos) => {
         if(pos){
             setLoc({
@@ -231,7 +247,9 @@ function Home(props)
                         key={index}
                         route={element}
                         handleExpand={handleExpand}
-                        expanded={expanded}/>
+                        expanded={expanded}
+                        setErrorToast={setErrorToast}
+                        setSuccessToast={setSuccessToast}/>
                 </>
             })
             
