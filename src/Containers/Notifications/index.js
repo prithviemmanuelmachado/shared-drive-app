@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Toast from "../../Components/Toast";
 import Loader from "../../Components/Loader";
 import RequestNotification from "../../Components/RequestNotification";
+import StatusNotification from "../../Components/StatusNotification";
 
 const useStyle = makeStyles(theme => {
     return{
@@ -41,6 +42,7 @@ function Notifications(props)
         timeout: 0
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [flip, setFlip] = useState(true);
 
     const setErrorToast = (message) => {
         setToast({
@@ -58,6 +60,22 @@ function Notifications(props)
         });
     };
 
+    const setSuccessToast = (message) => {
+        setToast({
+            message: message,
+            severity: 'primary',
+            handleClose: () => {setToast({
+                message: '',
+                severity: 'primary',
+                handleClose: () => {},
+                isOpen: false,
+                timeout: 0
+            })},
+            isOpen: true,
+            timeout: 2000
+        });
+    };
+
     useEffect(() => {
         getNotifications((data) => {
             setIsLoading(false);
@@ -66,7 +84,7 @@ function Notifications(props)
             setIsLoading(false);
             setErrorToast(msg);
         })
-    }, []);
+    }, [flip]);
 
     return<>
         <Grid
@@ -85,10 +103,19 @@ function Notifications(props)
                 <>
                     {
                         notifications.map((ele, index) => {
-                            if(ele.type === 'request')
-                            {
+                            if(ele.type === 'request'){
                                 return <>
-                                    <RequestNotification data={ele}/>
+                                    <RequestNotification 
+                                        data={ele} 
+                                        setErrorToast={setErrorToast}
+                                        setSuccessToast={setSuccessToast}
+                                        setFlip={setFlip}
+                                        flip={flip}/>
+                                </>
+                            }
+                            else if(ele.type === 'status'){
+                                return <>
+                                    <StatusNotification data={ele}/>
                                 </>
                             }
                         })

@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
-import Map from '../../Components/Map'
+import Map from '../Map'
 import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';

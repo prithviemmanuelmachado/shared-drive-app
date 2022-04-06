@@ -119,6 +119,7 @@ function Navigation(props){
                             fontSize='medium'/>,
                     onClick: () => {
                         navigate('/notifications');
+                        window.location.reload();
                         toggle();
                     } 
                 },
@@ -129,6 +130,7 @@ function Navigation(props){
                             fontSize='medium'/>,
                     onClick: () => {
                         navigate('/create-route');
+                        window.location.reload();
                         toggle();
                     } 
                 }

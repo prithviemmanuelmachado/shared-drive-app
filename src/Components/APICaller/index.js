@@ -392,3 +392,53 @@ export function getUsername(successCallBack, errorCallBack, id){
     })
     .catch(err => console.log(err));
 }
+
+export function getPickupLocation(successCallBack, errorCallBack, id){
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'jwt': cookies.get('jwt')
+        }
+    };
+    fetch(serverBaseURI+'/request/getPickupLocation?id='+id, requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data);
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function setRequestStatus(successCallBack, errorCallBack, status, id, notifId, createdFor){
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'jwt': cookies.get('jwt')
+        }
+    };
+    fetch(serverBaseURI+'/request/setRequestStatus?status='+status+'&id='+id+'&notifId='+notifId+'&createdFor='+createdFor, requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data.success);
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}
