@@ -26,8 +26,7 @@ const useStyle = makeStyles(theme => {
         body: {
             display: 'flex',
             flexDirection: 'column',
-            minHeight: '60vh',
-            justifyContent: 'center'
+            minHeight: '60vh'
         },
         noRoutes: {
             alignSelf: 'center'

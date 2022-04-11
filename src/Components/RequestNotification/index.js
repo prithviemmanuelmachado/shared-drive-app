@@ -23,7 +23,6 @@ const useStyle = makeStyles(theme => {
             justifyContent: "flex-end"
         },
         cardWidth:{
-            margin: 'auto',
             marginTop: 30,
             width: '100%'
         },

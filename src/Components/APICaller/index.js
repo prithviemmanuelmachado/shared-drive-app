@@ -442,3 +442,107 @@ export function setRequestStatus(successCallBack, errorCallBack, status, id, not
     })
     .catch(err => console.log(err));
 }
+
+export function createQuery(successCallBack, errorCallBack, body){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+                    'Content-Type': 'application/json',
+                    'jwt': cookies.get('jwt')
+                },
+        body: JSON.stringify(body)
+    };
+    fetch(serverBaseURI+'/help/createQuery', requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data.success);
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function getAllActiveQueries(successCallBack, errorCallBack){
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+                    'jwt': cookies.get('jwt')
+                }
+    };
+    fetch(serverBaseURI+'/help/getQueries', requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data);
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function claimQuery(successCallBack, errorCallBack, id){
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'jwt': cookies.get('jwt')
+        }
+    };
+    fetch(serverBaseURI+'/help/claimQuery?id='+id, requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data.success);
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}
+
+export function resolveQuery(successCallBack, errorCallBack, model){
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+            'jwt': cookies.get('jwt')
+        },
+        body: JSON.stringify(model)
+    };
+    fetch(serverBaseURI+'/help/resolveQuery', requestOptions)
+    .then(res => {
+        if(res.status === 400 || res.status === 500){
+            res.json()
+            .then(data => {
+                errorCallBack(data.error);
+            });
+        }
+        else{
+            res.json()
+            .then(data => { 
+                successCallBack(data.success);
+            });
+        } 
+    })
+    .catch(err => console.log(err));
+}

@@ -24,6 +24,7 @@ import AdminLogin from './Containers/Admin/Login';
 import AdditionalInformation from './Containers/Admin/AdditionalInformation';
 import AdminHome from './Containers/Admin/AdminHome';
 import UpdateProfile from './Containers/UpdateProfile';
+import Footer from './Components/Footer';
 
 const themes = createTheme({
   palette:{
@@ -91,6 +92,10 @@ function App() {
               element = {<Home/>} 
               path = '/'/>
           </Routes>
+          <div className={classes.toolbar}></div>
+        </Box>
+        <Box>
+          <Footer></Footer>
         </Box> 
       </ThemeProvider>
     </div>

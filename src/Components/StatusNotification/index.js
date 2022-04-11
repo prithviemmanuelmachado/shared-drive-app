@@ -9,7 +9,6 @@ import { getUsername } from "../APICaller";
 const useStyle = makeStyles(theme => {
     return{
         cardWidth:{
-            margin: 'auto',
             marginTop: 30,
             width: '100%'
         },

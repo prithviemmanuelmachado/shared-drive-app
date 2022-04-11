@@ -7,12 +7,15 @@ import Menu from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core';
 import Navigation from '../Navigation';
 
-const useStyles = makeStyles({
-    border: {
-        borderBottom: '3px solid #3f51b5'
-    },
-    flexBox: {
-        flex: 1
+const useStyles = makeStyles(theme => {
+    return{
+        border: {
+            borderBottom: '3px solid',
+            borderBottomColor: theme.palette.primary.main
+        },
+        flexBox: {
+            flex: 1
+        }
     }
 });
 
@@ -35,8 +38,7 @@ function Header(props){
                     className={classes.flexBox}
                     color='primary'
                     component= 'h1'
-                    variant = 'h5'
-                >
+                    variant = 'h5'>
                     Shared Drive
                 </Typography>
                 <Button

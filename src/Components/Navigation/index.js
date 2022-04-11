@@ -45,7 +45,7 @@ function Navigation(props){
         navigate('/');
         window.location.reload();
     };
-    isAdminLoggedIn((status) => {setIsAdmin(status)}, () => {logout();});
+    isAdminLoggedIn((status) => {setIsAdmin(status);}, () => {logout();});
 
     const doesTokenExist = cookies.get('jwt')? true: false;
     if(doesTokenExist != loggedInStatus)

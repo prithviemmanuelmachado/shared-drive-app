@@ -7,6 +7,7 @@ import Toast from "../../Components/Toast";
 import Loader from "../../Components/Loader";
 import RequestNotification from "../../Components/RequestNotification";
 import StatusNotification from "../../Components/StatusNotification";
+import ReplyNotification from "../../Components/ReplyNotification";
 
 const useStyle = makeStyles(theme => {
     return{
@@ -21,10 +22,10 @@ const useStyle = makeStyles(theme => {
             },
             display: 'flex',
             flexDirection: 'column',
-            minHeight: '70vh',
-            justifyContent: 'center'
+            minHeight: '70vh'
         },
         noNotifications: {
+            justifySelf: 'center',
             alignSelf: 'center'
         }
     } 
@@ -80,6 +81,7 @@ function Notifications(props)
         getNotifications((data) => {
             setIsLoading(false);
             setNotifications(data);
+            console.log(data);
         }, (msg)=> {
             setIsLoading(false);
             setErrorToast(msg);
@@ -116,6 +118,11 @@ function Notifications(props)
                             else if(ele.type === 'status'){
                                 return <>
                                     <StatusNotification data={ele}/>
+                                </>
+                            }
+                            else if(ele.type === 'reply'){
+                                return<>
+                                    <ReplyNotification data = {ele}/>
                                 </>
                             }
                         })
