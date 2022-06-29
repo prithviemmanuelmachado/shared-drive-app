@@ -45,6 +45,7 @@ function Map(props){
     
     navigator.geolocation.getCurrentPosition((pos) => {
       if(pos){
+          console.log(pos);
           setLoc({
               lng: pos.coords.longitude,
               lat: pos.coords.latitude
