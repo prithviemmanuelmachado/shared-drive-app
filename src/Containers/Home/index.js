@@ -121,20 +121,19 @@ function Home(props)
     const showError = (error) => {
         switch(error.code) {
           case error.PERMISSION_DENIED:
-            setErrorToast("User denied the request for Geolocation.");
-            setLoc({ lng: 77.5946, lat: 12.9716 });
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
             break;
           case error.POSITION_UNAVAILABLE:
             setErrorToast("Location information is unavailable.");
-            setLoc({ lng: 77.5946, lat: 12.9716 });
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
             break;
           case error.TIMEOUT:
             setErrorToast("The request to get user location timed out.");
-            setLoc({ lng: 77.5946, lat: 12.9716 });
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
             break;
           case error.UNKNOWN_ERROR:
             setErrorToast("An unknown error occurred.");
-            setLoc({ lng: 77.5946, lat: 12.9716 });
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
             break;
         }
         setIsLoading(false);

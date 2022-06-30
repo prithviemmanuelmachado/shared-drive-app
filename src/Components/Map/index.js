@@ -29,17 +29,17 @@ function Map(props){
     const showError = (error) => {
       switch(error.code) {
         case error.PERMISSION_DENIED:
-          setLoc({ lng: 77.5946, lat: 12.9716 });
-          break;
-        case error.POSITION_UNAVAILABLE:
-          setLoc({ lng: 77.5946, lat: 12.9716 });
-          break;
-        case error.TIMEOUT:
-          setLoc({ lng: 77.5946, lat: 12.9716 });
-          break;
-        case error.UNKNOWN_ERROR:
-          setLoc({ lng: 77.5946, lat: 12.9716 });
-          break;
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
+            break;
+          case error.TIMEOUT:
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
+            break;
+          case error.UNKNOWN_ERROR:
+            setLoc({ lng: 74.793184161674, lat: 13.02200792900636 });
+            break;
       }
     }
     
